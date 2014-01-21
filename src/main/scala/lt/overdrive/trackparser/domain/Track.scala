@@ -1,5 +1,3 @@
 package lt.overdrive.trackparser.domain
 
-class Track {
-
-}
+case class Track(points: Seq[TrackPoint])

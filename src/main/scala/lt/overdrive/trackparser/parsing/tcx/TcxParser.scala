@@ -13,7 +13,7 @@ class TcxParser extends GpsFileParser {
   def loadTrail(file: File): Trail = {
     val gpx = scala.xml.XML.loadFile(file)
 
-    val tracks: Seq[Track] = (gpx \\ "Activity").map(_ => new Track)
+    val tracks: Seq[Track] = (gpx \\ "Activity").map(_ => new Track(Seq()))
 
     Trail(tracks)
   }
