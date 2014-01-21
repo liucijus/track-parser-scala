@@ -12,7 +12,8 @@ class ParserSpec extends Specification {
 
       val trail: Try[Trail] = Parser.parserFile(file)
 
-      trail must beSuccessfulTry //todo: .withValue(tracks must be not empty)
+      trail must beSuccessfulTry
+      trail.get.tracks must not be empty
     }
 
     "parse GPX" in {
@@ -20,15 +21,17 @@ class ParserSpec extends Specification {
 
       val trail: Try[Trail] = Parser.parserFile(file)
 
-      trail must beSuccessfulTry[Trail].withValue(trail.get.tracks must be not empty) //todo: .withValue(tracks must be not empty)
+      trail must beSuccessfulTry[Trail]
+      trail.get.tracks must not be empty
     }
 
     "fail for invalid file" in {
       val file = getFile("tcx/invalid.tcx").get
+      val expectedExceptionMessage  = s"File $file was not recognized to be of supported type [TCX, GPX]"
 
       val trail: Try[Trail] = Parser.parserFile(file)
 
-      trail must beFailedTry[Trail].withThrowable[UnrecognizedFileException]
+      trail must beFailedTry[Trail].withThrowable[UnrecognizedFileException](expectedExceptionMessage)
     }
   }
 }
