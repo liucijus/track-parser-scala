@@ -58,16 +58,6 @@ object FileType extends Enumeration {
   val Gpx, Tcx, Unknown = Value
 }
 
-trait GpsFileParser {
-  def parse(file: File): Trail = {
-    if (!file.exists) throw new ParserException(s"File $file does not exist.")
 
-    loadTrail(file)
-  }
-
-  def loadTrail(file: File): Trail
-
-  def getSchema: Schema
-}
 
 
