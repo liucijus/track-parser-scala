@@ -3,13 +3,12 @@ package lt.overdrive.trackparser.parsing
 import java.io.File
 import scala.util.{Success, Failure, Try}
 import lt.overdrive.trackparser.parsing.FileType.FileType
-import lt.overdrive.trackparser.domain.Trail
 import javax.xml.validation.{Schema, Validator}
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
-import lt.overdrive.trackparser.utils.ResourceUtils.loadSchema
 import lt.overdrive.trackparser.parsing.gpx.GpxParser
 import lt.overdrive.trackparser.parsing.tcx.TcxParser
+import lt.overdrive.trackparser.domain.Trail
 
 object Parser {
   def parserFile(file: File): Try[Trail] = {
@@ -59,10 +58,15 @@ object FileType extends Enumeration {
   val Gpx, Tcx, Unknown = Value
 }
 
-class UnrecognizedFileException(msg: String) extends Exception(msg)
-
 trait GpsFileParser {
-  def parse(file: File): Trail
+  def parse(file: File): Trail = {
+    if (!file.exists) throw new ParserException(s"File $file does not exist.")
+
+    loadTrail(file)
+  }
+
+  def loadTrail(file: File): Trail
+
   def getSchema: Schema
 }
 
