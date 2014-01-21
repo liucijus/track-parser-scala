@@ -7,7 +7,9 @@ import lt.overdrive.trackparser.domain.Trail
 import javax.xml.validation.{Schema, Validator}
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
-import lt.overdrive.trackparser.utils.ResourceUtils
+import lt.overdrive.trackparser.utils.ResourceUtils.loadSchema
+import lt.overdrive.trackparser.parsing.gpx.GpxParser
+import lt.overdrive.trackparser.parsing.tcx.TcxParser
 
 object Parser {
   def parserFile(file: File): Try[Trail] = {
@@ -55,18 +57,6 @@ case class Parser(file: File) {
 object FileType extends Enumeration {
   type FileType = Value
   val Gpx, Tcx, Unknown = Value
-}
-
-class TcxParser extends GpsFileParser {
-  def parse(file: File): Trail = Trail(Seq())
-
-  def getSchema: Schema = ResourceUtils.loadSchema("tcx/TrainingCenterDatabasev2.xsd").get
-}
-
-class GpxParser extends GpsFileParser {
-  def parse(file: File): Trail = Trail(Seq())
-
-  def getSchema: Schema = ResourceUtils.loadSchema("gpx/gpx.xsd").get
 }
 
 class UnrecognizedFileException(msg: String) extends Exception(msg)
