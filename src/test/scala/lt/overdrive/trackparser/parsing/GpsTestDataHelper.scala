@@ -17,11 +17,11 @@ object GpsTestDataHelper {
     prepareTrail(prepareTrackPointsWithoutAltitude(tracksPoints))
 
   def prepareTrackPointsWithoutAltitude(points: Seq[TrackPoint]): Seq[TrackPoint] =
-    points.map(p => new TrackPoint(p.longitude, p.latitude, None, p.date))
+    points.map(p => new TrackPoint(p.latitude, p.longitude, None, p.date))
 
   def prepareTrailWithoutTime(tracksPoints: Seq[TrackPoint]): Trail =
     prepareTrail(prepareTrackPointsWithoutTime(tracksPoints))
 
   def prepareTrackPointsWithoutTime(tracksPoints: Seq[TrackPoint]): Seq[TrackPoint] =
-    tracksPoints.map(p => TrackPoint(p.longitude, p.latitude, p.altitude, None))
+    tracksPoints.map(p => TrackPoint(p.latitude, p.longitude, p.altitude, None))
 }

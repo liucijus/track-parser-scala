@@ -27,11 +27,11 @@ class ParserSpec extends Specification {
 
     "fail for invalid file" in {
       val file = getFile("tcx/invalid.tcx").get
-      //val expectedExceptionMessage = s"File $file was not recognized to be of supported type [TCX, GPX]"
+      val expectedExceptionMessage = s"File $file was not recognized to be of supported type [TCX, GPX]"
 
       val trail: Try[Trail] = Parser.parserFile(file)
 
-      trail must beFailedTry //[Trail].withThrowable[UnrecognizedFileException](expectedExceptionMessage)
+      trail must beFailedTry[Trail].withThrowable[UnrecognizedFileException](expectedExceptionMessage)
     }
   }
 }
