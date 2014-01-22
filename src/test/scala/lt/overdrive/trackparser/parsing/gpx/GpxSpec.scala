@@ -7,7 +7,7 @@ import lt.overdrive.trackparser.parsing.GpsTestDataHelper._
 
 class GpxSpec extends Specification {
   "gpx parser" should {
-    "load one track" in {
+    "load 1 track" in {
       val trail: Trail = new GpxParser().parse(getFile("gpx/test_with_ele.gpx").get)
 
       trail.tracks must have size 1

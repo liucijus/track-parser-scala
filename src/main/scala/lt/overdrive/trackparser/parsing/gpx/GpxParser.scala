@@ -13,12 +13,15 @@ class GpxParser extends GpsFileParser {
   def loadTrail(file: File): Trail = {
     val gpx = scala.xml.XML.loadFile(file)
 
-    val tracks: Seq[Track] = (gpx \ "trk").map(
+    val tracks: Seq[Track] = (gpx \ "trk").map{
       t => {
-        val points: Seq[TrackPoint] = (t \\ "trkpt").map({
-          p =>
+        val points: Seq[TrackPoint] = (t \\ "trkpt").map{
+          p => {
+            //todo fix test cases
             val latitude: Double = (p \ "@lat").text.toDouble
+
             val longitude: Double = (p \ "@lon").text.toDouble
+
             val altitude: Option[Double] = (p \ "ele").textOption match {
               case Some(value) => Some(value.toDouble)
               case None => None
@@ -28,10 +31,13 @@ class GpxParser extends GpsFileParser {
               case Some(xmldate) => Some(new DateTime(xmldate))
               case None => None
             }
+
             TrackPoint(latitude, longitude, altitude, time)
-        })
-        new Track(points)
-      })
+          }
+        }
+        Track(points)
+      }
+  }
 
     Trail(tracks)
   }
