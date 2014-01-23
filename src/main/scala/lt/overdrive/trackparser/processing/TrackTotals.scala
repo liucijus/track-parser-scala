@@ -2,13 +2,8 @@ package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
 
 import org.joda.time.Seconds
 
-case class TrackTotals(distance: Double,
-                       time: Option[Seconds],
-                       ascent: Option[Double],
-                       descent: Option[Double],
-                       maxSpeed: Option[Double],
-                       minSpeed: Option[Double],
-                       speed: Option[Double] = time match {
-                         case Some(t) => Some(distance / t.getSeconds)
-                         case None => _
-                       })
+case class TrackTotals(distance: Double, altitudeTotals: Option[AltitudeTotal], timeTotals: Option[TimeTotals])
+
+case class AltitudeTotal(ascent: Double, descent: Double)
+
+case class TimeTotals(time: Seconds, maxSpeed: Double, minSpeed: Double, speed: Double)

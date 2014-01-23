@@ -1,15 +1,26 @@
 package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
 
 import lt.overdrive.trackparser.domain.{TrackPoint, Track}
+import org.joda.time.Seconds
 
 case class TrackProcessor(track: Track) {
   def calculateTotals(): TrackTotals = {
-    def calculateDistance(points: Seq[TrackPoint], left: TrackPoint): Double = points match {
-      case Nil => 0
-      case head :: tail => Haversine.calculateDistance(left, head) + calculateDistance(tail, head)
-    }
+    val points = track.points
 
-    TrackTotals(calculateDistance(), None, None, None, None, None)
+    if (points.isEmpty || points.size == 1)
+      TrackTotals(0, Some(AltitudeTotal(0, 0)), Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
+    else {
+      val pointsWithoutTime = points.filter(_.date.isEmpty)
+      val pointsWitoutAltitude = points.filter(_.altitude.isEmpty)
+
+     /* val altitudeTotals = if (pointsWitoutAltitude.isEmpty) {
+        Some(points.tail.fold[(AltitudeTotal, TrackPoint)]((AltitudeTotal(0, 0), points.head)) {
+          (t, p) => (if (p.))
+        })
+      } else None*/
+
+      TrackTotals(0, None, None)
+    }
   }
 }
 
