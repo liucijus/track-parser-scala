@@ -9,19 +9,19 @@ import lt.overdrive.trackparser.parsing.GpsTestDataHelper._
 class TcxSpec extends Specification {
   "parser" should {
     "load 1 track" in {
-      val trail: Trail = new GpxParser().parse(getFile("tcx/valid.tcx").get)
+      val trail: Trail = new TcxParser().parse(getFile("tcx/valid.tcx").get)
 
       trail.tracks must have size 1
     }
 
     "load 2 tracks" in {
-      val trail: Trail = new GpxParser().parse(getFile("tcx/2activities.tcx").get)
+      val trail: Trail = new TcxParser().parse(getFile("tcx/2activities.tcx").get)
 
       trail.tracks must have size 2
     }
 
     "skip points without position" in {
-      val expectedTrail = prepareTrail(Seq(Point_1, Point_2))
+      val expectedTrail = prepareTrail(Seq(Point_1, Point_3))
 
       val trail = new TcxParser().parse(getFile("tcx/missing_position.tcx").get)
 
