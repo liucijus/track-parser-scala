@@ -1,13 +1,13 @@
 package lt.overdrive.trackparser.parsing
 
 import org.specs2.mutable.Specification
-import scala.util.{Failure, Try}
+import scala.util.Try
 import lt.overdrive.trackparser.domain.Trail
 import lt.overdrive.trackparser.utils.ResourceUtils.getFile
 
 class ParserSpec extends Specification {
   "parser" should {
-    "parse TCX " in {
+    "parse TCX" in {
       val file = getFile("tcx/test_with_ele.tcx").get
 
       val trail: Try[Trail] = Parser.parserFile(file)
