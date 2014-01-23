@@ -3,7 +3,8 @@ package lt.overdrive.trackparser.parsing.gpx
 import org.specs2.mutable.Specification
 import lt.overdrive.trackparser.utils.ResourceUtils.getFile
 import lt.overdrive.trackparser.domain.{TrackPoint, Trail}
-import lt.overdrive.trackparser.parsing.GpsTestDataHelper._
+import lt.overdrive.trackparser.GpsTestDataHelper
+import GpsTestDataHelper._
 
 class GpxSpec extends Specification {
   "gpx parser" should {

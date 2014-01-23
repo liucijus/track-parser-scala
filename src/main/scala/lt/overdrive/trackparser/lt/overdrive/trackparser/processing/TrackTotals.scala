@@ -1,8 +1,14 @@
 package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
 
-/**
- * Created by p998vyp on 14.1.23.
- */
-class TrackTotals {
+import org.joda.time.Seconds
 
-}
+case class TrackTotals(distance: Double,
+                       time: Option[Seconds],
+                       ascent: Option[Double],
+                       descent: Option[Double],
+                       maxSpeed: Option[Double],
+                       minSpeed: Option[Double],
+                       speed: Option[Double] = time match {
+                         case Some(t) => Some(distance / t.getSeconds)
+                         case None => _
+                       })

@@ -11,17 +11,23 @@ object GpsTestDataHelper {
   val Point_5 = TrackPoint(54.709552, 25.245176, Some(164.748660), Some(new DateTime("2012-11-24T06:42:39Z")))
   val Point_6 = TrackPoint(54.709523, 25.245106, Some(164.775070), Some(new DateTime("2012-11-24T06:42:40Z")))
 
-  def prepareTrail(trackPoints: Seq[TrackPoint]): Trail = Trail(Seq(Track(trackPoints)))
+  def prepareTrail(points: Seq[TrackPoint]): Trail = Trail(Seq(Track(points)))
 
-  def prepareTrailWithoutAltitude(tracksPoints: Seq[TrackPoint]): Trail =
-    prepareTrail(prepareTrackPointsWithoutAltitude(tracksPoints))
+  def prepareTrailWithoutAltitude(points: Seq[TrackPoint]): Trail =
+    prepareTrail(prepareTrackPointsWithoutAltitude(points))
 
   def prepareTrackPointsWithoutAltitude(points: Seq[TrackPoint]): Seq[TrackPoint] =
     points.map(p => new TrackPoint(p.latitude, p.longitude, None, p.date))
 
-  def prepareTrailWithoutTime(tracksPoints: Seq[TrackPoint]): Trail =
-    prepareTrail(prepareTrackPointsWithoutTime(tracksPoints))
+  def prepareTrailWithoutTime(points: Seq[TrackPoint]): Trail =
+    prepareTrail(prepareTrackPointsWithoutTime(points))
 
-  def prepareTrackPointsWithoutTime(tracksPoints: Seq[TrackPoint]): Seq[TrackPoint] =
-    tracksPoints.map(p => TrackPoint(p.latitude, p.longitude, p.altitude, None))
+  def prepareTrackPointsWithoutTime(points: Seq[TrackPoint]): Seq[TrackPoint] =
+    points.map(p => TrackPoint(p.latitude, p.longitude, p.altitude, None))
+
+  def trackOf(points: TrackPoint*) = Track(points)
+
+  def trackWithoutTimeOf(points: TrackPoint*) = Track(prepareTrackPointsWithoutTime(points))
+
+  def trackWithoutAltitudeOf(points: TrackPoint*) = Track(prepareTrackPointsWithoutAltitude(points))
 }

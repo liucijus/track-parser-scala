@@ -4,7 +4,8 @@ import org.specs2.mutable.Specification
 import lt.overdrive.trackparser.domain.{TrackPoint, Trail}
 import lt.overdrive.trackparser.parsing.gpx.GpxParser
 import lt.overdrive.trackparser.utils.ResourceUtils.getFile
-import lt.overdrive.trackparser.parsing.GpsTestDataHelper._
+import lt.overdrive.trackparser.GpsTestDataHelper
+import GpsTestDataHelper._
 
 class TcxSpec extends Specification {
   "parser" should {
