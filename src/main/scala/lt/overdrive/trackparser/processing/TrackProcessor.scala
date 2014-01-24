@@ -13,12 +13,6 @@ case class TrackProcessor(track: Track) {
       val pointsWithoutTime = points.filter(_.date.isEmpty)
       val pointsWitoutAltitude = points.filter(_.altitude.isEmpty)
 
-     /* val altitudeTotals = if (pointsWitoutAltitude.isEmpty) {
-        Some(points.tail.fold[(AltitudeTotal, TrackPoint)]((AltitudeTotal(0, 0), points.head)) {
-          (t, p) => (if (p.))
-        })
-      } else None*/
-
       TrackTotals(0, None, None)
     }
   }
