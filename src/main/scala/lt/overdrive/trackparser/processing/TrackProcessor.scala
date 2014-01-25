@@ -27,46 +27,69 @@ case class TrackProcessor(track: Track) {
   def calculateTotals(): TrackTotals = {
     val points = track.points
 
-    if (points.isEmpty)
-      TrackTotals(0, None, Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
-    else if (points.size == 1)
-      TrackTotals(0, Some(AltitudeTotals(0, 0)), Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
-    else {
-      val pointsWithoutTime = points.filter(_.date.isEmpty)
-      val pointsWithoutAltitude = points.filter(_.altitude.isEmpty)
+    def calculateAltitudeTotalsIfHasAltitude(pointsWithoutAltitude: Seq[TrackPoint]): Option[AltitudeTotals] = {
+      def hasAltitude: Boolean = pointsWithoutAltitude.isEmpty
 
-      val distance = segments.foldLeft[Double](0)((d, s) => d + Haversine.calculateDistance(s.point1, s.point2))
-
-      val timeTotals = if (pointsWithoutTime.isEmpty) {
-        val time = Seconds.secondsBetween(points.head.date.get, points.last.date.get)
-        val speed = distance / time.getSeconds
-
-        val (minSpeed, maxSpeed) = segments.foldLeft[(Double, Double)]((Double.MaxValue, 0))((totals, segment) => {
-          val segmentTime = Seconds.secondsBetween(segment.point1.date.get, segment.point2.date.get)
-          val segmentDistance = Haversine.calculateDistance(segment.point1, segment.point2)
-          val segmentSpeed = segmentDistance / segmentTime.getSeconds
-
-          val minSpeed = if (totals._1 > segmentSpeed) segmentSpeed else totals._1
-          val maxSpeed = if (totals._2 < segmentSpeed) segmentSpeed else totals._2
-          (minSpeed, maxSpeed)
-        })
-
-        Some(TimeTotals(time, speed, minSpeed, maxSpeed))
-      } else None
-
-      val altitudeTotals = if (pointsWithoutAltitude.isEmpty) {
-        val (descent, ascent) = segments.foldLeft[(Double, Double)]((0, 0))(
+      def calculateTotals: Some[AltitudeTotals] = {
+        val (descent, ascent) = segments.foldLeft((0d, 0d))(
           (totals, segment) => {
             val difference = segment.point1.altitude.get - segment.point2.altitude.get
-            if (difference > 0) (totals._1, totals._2 + difference)
-            else (totals._1 - difference, totals._2)
+            val (descent, ascent) = totals
+            if (difference > 0) (descent, ascent + difference) else (descent - difference, ascent)
           }
         )
         Some(AltitudeTotals(descent, ascent))
-      } else None
+      }
 
-      TrackTotals(distance, altitudeTotals, timeTotals)
+      if (hasAltitude) calculateTotals else None
     }
+
+    def calculateTimeTotalsIfHasTime(pointsWithoutTime: Seq[TrackPoint], distance: Double): Option[TimeTotals] = {
+      def hasTime: Boolean = pointsWithoutTime.isEmpty
+
+      def calculateTimeTotals: Some[TimeTotals] = {
+        val time = Seconds.secondsBetween(points.head.date.get, points.last.date.get)
+        val speed = distance / time.getSeconds
+
+        val (minSpeed, maxSpeed) = segments.foldLeft((Double.MaxValue, 0d))((totals, segment) => {
+          val time = Seconds.secondsBetween(segment.point1.date.get, segment.point2.date.get)
+          val distance = Haversine.calculateDistance(segment.point1, segment.point2)
+          val speed = distance / time.getSeconds
+
+          val (minSpeed, maxSpeed) = totals
+
+          (if (minSpeed > speed) speed else minSpeed, if (maxSpeed < speed) speed else maxSpeed)
+        })
+
+        Some(TimeTotals(time, speed, minSpeed, maxSpeed))
+      }
+
+      if (hasTime) calculateTimeTotals else None
+    }
+
+    def calculateTotals = {
+      val distance = segments.foldLeft(0d)((distance, segment) => distance + Haversine.calculateDistance(segment.point1, segment.point2))
+
+      val pointsWithoutTime = points.filter(_.date.isEmpty)
+      val timeTotals = calculateTimeTotalsIfHasTime(pointsWithoutTime, distance)
+
+      val pointsWithoutAltitude = points.filter(_.altitude.isEmpty)
+      val altitudeTotals = calculateAltitudeTotalsIfHasAltitude(pointsWithoutAltitude)
+
+      (distance, altitudeTotals, timeTotals)
+    }
+
+    val defaultTimeTotals = Some(TimeTotals(Seconds.ZERO, 0, 0, 0))
+    
+    val (distance, altitudeTotals, timeTotals) = if (points.isEmpty)
+      (0d, None, defaultTimeTotals)
+    else if (points.size == 1)
+      (0d, Some(AltitudeTotals(0, 0)), defaultTimeTotals)
+    else {
+      calculateTotals
+    }
+
+    TrackTotals(distance, altitudeTotals, timeTotals)
   }
 }
 
