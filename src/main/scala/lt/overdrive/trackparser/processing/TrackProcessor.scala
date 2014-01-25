@@ -27,8 +27,10 @@ case class TrackProcessor(track: Track) {
   def calculateTotals(): TrackTotals = {
     val points = track.points
 
-    if (points.isEmpty || points.size == 1)
+    if (points.isEmpty)
       TrackTotals(0, None, Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
+    else if (points.size == 1)
+      TrackTotals(0, Some(AltitudeTotals(0, 0)), Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
     else {
       val pointsWithoutTime = points.filter(_.date.isEmpty)
       val pointsWithoutAltitude = points.filter(_.altitude.isEmpty)
@@ -53,7 +55,14 @@ case class TrackProcessor(track: Track) {
       } else None
 
       val altitudeTotals = if (pointsWithoutAltitude.isEmpty) {
-        Some(AltitudeTotals(0, 0))
+        val (descent, ascent) = segments.foldLeft[(Double, Double)]((0, 0))(
+          (totals, segment) => {
+            val difference = segment.point1.altitude.get - segment.point2.altitude.get
+            if (difference > 0) (totals._1, totals._2 + difference)
+            else (totals._1 - difference, totals._2)
+          }
+        )
+        Some(AltitudeTotals(descent, ascent))
       } else None
 
       TrackTotals(distance, altitudeTotals, timeTotals)

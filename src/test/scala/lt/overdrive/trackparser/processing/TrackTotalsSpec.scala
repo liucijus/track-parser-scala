@@ -73,7 +73,6 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have correct ascent" in {
-      pending("prepare good test data")
       val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -82,8 +81,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have no altitude totals for track without altitude" in {
-      pending("prepare good test data")
-      val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
+      val track: Track = trackWithoutAltitudeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
 
@@ -91,7 +89,6 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have correct descent" in {
-      pending("prepare good test data")
       val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -100,7 +97,6 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have 0 ascent for 1 point track" in {
-      pending("prepare good test data")
       val track: Track = trackOf(Point_1)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -109,7 +105,6 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have 0 descent for 1 point track" in {
-      pending("prepare good test data")
       val track: Track = trackOf(Point_1)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
