@@ -7,8 +7,6 @@ import lt.overdrive.trackparser.GpsTestDataHelper
 import GpsTestDataHelper._
 
 class TrackTotalsSpec extends Specification {
-  args(skipAll = true)
-
   "track totals" should {
     "have distance equal 0 for empty track" in {
       val track: Track = trackOf()
@@ -59,7 +57,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have no time totals for timeless track" in {
-      val track: Track = trackOf(Point_1, Point_2, Point_3)
+      val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
 
@@ -75,6 +73,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have correct ascent" in {
+      pending("prepare good test data")
       val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -83,6 +82,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have no altitude totals for track without altitude" in {
+      pending("prepare good test data")
       val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -91,6 +91,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have correct descent" in {
+      pending("prepare good test data")
       val track: Track = trackWithoutTimeOf(Point_1, Point_2, Point_3)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -99,6 +100,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have 0 ascent for 1 point track" in {
+      pending("prepare good test data")
       val track: Track = trackOf(Point_1)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()
@@ -107,6 +109,7 @@ class TrackTotalsSpec extends Specification {
     }
 
     "have 0 descent for 1 point track" in {
+      pending("prepare good test data")
       val track: Track = trackOf(Point_1)
 
       val totals: TrackTotals = TrackProcessor(track).calculateTotals()

@@ -25,9 +25,9 @@ object GpsTestDataHelper {
   def prepareTrackPointsWithoutTime(points: Seq[TrackPoint]): Seq[TrackPoint] =
     points.map(p => TrackPoint(p.latitude, p.longitude, p.altitude, None))
 
-  def trackOf(points: TrackPoint*) = Track(points)
+  def trackOf(points: TrackPoint*) = Track(points.toList)
 
-  def trackWithoutTimeOf(points: TrackPoint*) = Track(prepareTrackPointsWithoutTime(points))
+  def trackWithoutTimeOf(points: TrackPoint*) = Track(prepareTrackPointsWithoutTime(points.toList))
 
-  def trackWithoutAltitudeOf(points: TrackPoint*) = Track(prepareTrackPointsWithoutAltitude(points))
+  def trackWithoutAltitudeOf(points: TrackPoint*) = Track(prepareTrackPointsWithoutAltitude(points.toList))
 }

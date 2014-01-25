@@ -2,18 +2,61 @@ package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
 
 import lt.overdrive.trackparser.domain.{TrackPoint, Track}
 import org.joda.time.Seconds
+import scala.annotation.tailrec
 
 case class TrackProcessor(track: Track) {
+  private val segments: Seq[Segment] = convert(track)
+
+  private def convert(track: Track): Seq[Segment] = track.points match {
+    case Nil => List()
+    case head :: Nil => List()
+    case head :: tail => {
+      @tailrec
+      def makeSegments(first: TrackPoint, rest: Seq[TrackPoint], accu: Seq[Segment]): Seq[Segment] = {
+        val segments = accu :+ Segment(first, rest.head)
+        rest match {
+          case head :: Nil => segments
+          case head :: tail => makeSegments(head, tail, segments)
+        }
+      }
+
+      makeSegments(head, tail, List())
+    }
+  }
+
   def calculateTotals(): TrackTotals = {
     val points = track.points
 
     if (points.isEmpty || points.size == 1)
-      TrackTotals(0, Some(AltitudeTotal(0, 0)), Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
+      TrackTotals(0, None, Some(TimeTotals(Seconds.ZERO, 0, 0, 0)))
     else {
       val pointsWithoutTime = points.filter(_.date.isEmpty)
-      val pointsWitoutAltitude = points.filter(_.altitude.isEmpty)
+      val pointsWithoutAltitude = points.filter(_.altitude.isEmpty)
 
-      TrackTotals(0, None, None)
+      val distance = segments.foldLeft[Double](0)((d, s) => d + Haversine.calculateDistance(s.point1, s.point2))
+
+      val timeTotals = if (pointsWithoutTime.isEmpty) {
+        val time = Seconds.secondsBetween(points.head.date.get, points.last.date.get)
+        val speed = distance / time.getSeconds
+
+        val (minSpeed, maxSpeed) = segments.foldLeft[(Double, Double)]((Double.MaxValue, 0))((totals, segment) => {
+          val segmentTime = Seconds.secondsBetween(segment.point1.date.get, segment.point2.date.get)
+          val segmentDistance = Haversine.calculateDistance(segment.point1, segment.point2)
+          val segmentSpeed = segmentDistance / segmentTime.getSeconds
+
+          val minSpeed = if (totals._1 > segmentSpeed) segmentSpeed else totals._1
+          val maxSpeed = if (totals._2 < segmentSpeed) segmentSpeed else totals._2
+          (minSpeed, maxSpeed)
+        })
+
+        Some(TimeTotals(time, speed, minSpeed, maxSpeed))
+      } else None
+
+      val altitudeTotals = if (pointsWithoutAltitude.isEmpty) {
+        Some(AltitudeTotals(0, 0))
+      } else None
+
+      TrackTotals(distance, altitudeTotals, timeTotals)
     }
   }
 }
@@ -47,3 +90,5 @@ object Haversine {
     EarthRadiusInM * c
   }
 }
+
+case class Segment(point1: TrackPoint, point2: TrackPoint)
