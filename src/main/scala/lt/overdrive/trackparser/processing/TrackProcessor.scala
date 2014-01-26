@@ -105,6 +105,12 @@ case class TrackProcessor(track: Track) {
   }
 }
 
+object TrackProcessor {
+  def calculateRectangle(tracks: Seq[Track]): Option[TrackRectangle] = {
+    TrackProcessor(tracks.reduce((t1, t2) => Track(t1.points ++ t2.points))).calculateRectangle()
+  }
+}
+
 /**
  * Calculates distance using Haversine formula.
  *

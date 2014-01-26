@@ -45,5 +45,18 @@ class TrackRectangleSpec extends Specification {
 
       rectangle.get.getCenterPoint must beEqualTo(expectedCenter)
     }
+
+    "correct rectangle for multiple tracks" in {
+      val tracks: Seq[Track] = Seq(trackOf(Point_1, Point_2, Point_3), trackOf(Point_4, Point_5, Point_6))
+      val expectedSouthWest = TrackPoint(Point_6.latitude, Point_6.longitude)
+      val expectedNorthEast = TrackPoint(Point_1.latitude, Point_1.longitude)
+      val expectedCenter = TrackPoint(54.709610999999995, 25.2452185)
+
+      val rectangle = TrackProcessor.calculateRectangle(tracks)
+
+      rectangle.get.southWest must beEqualTo(expectedSouthWest)
+      rectangle.get.northEast must beEqualTo(expectedNorthEast)
+      rectangle.get.getCenterPoint() must beEqualTo(expectedCenter)
+    }
   }
 }
