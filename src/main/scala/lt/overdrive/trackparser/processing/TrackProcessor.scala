@@ -3,8 +3,13 @@ package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
 import lt.overdrive.trackparser.domain.{TrackPoint, Track}
 import org.joda.time.Seconds
 import scala.annotation.tailrec
+import lt.overdrive.trackparser.processing.TrackRectangle
 
 case class TrackProcessor(track: Track) {
+  def calculateRectangle(): Option[TrackRectangle] = {
+    None
+  }
+
   private val segments: Seq[Segment] = convert(track)
 
   private def convert(track: Track): Seq[Segment] = track.points match {
