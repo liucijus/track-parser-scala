@@ -7,7 +7,14 @@ import lt.overdrive.trackparser.processing.TrackRectangle
 
 case class TrackProcessor(track: Track) {
   def calculateRectangle(): Option[TrackRectangle] = {
-    None
+    track.points match {
+      case Nil => None
+      case points => {
+        val southWest = TrackPoint(points.minBy(_.latitude).latitude, points.minBy(_.longitude).longitude)
+        val northEast = TrackPoint(points.maxBy(_.latitude).latitude, points.maxBy(_.longitude).longitude)
+        Option(TrackRectangle(southWest, northEast))
+      }
+    }
   }
 
   private val segments: Seq[Segment] = convert(track)
@@ -85,7 +92,7 @@ case class TrackProcessor(track: Track) {
     }
 
     val defaultTimeTotals = Some(TimeTotals(Seconds.ZERO, 0, 0, 0))
-    
+
     val (distance, altitudeTotals, timeTotals) = if (points.isEmpty)
       (0d, None, defaultTimeTotals)
     else if (points.size == 1)
