@@ -1,6 +1,12 @@
 name := "track-parser"
 
-version := "1.0"
+organization := "overdrive.lt"
+
+val gitHeadCommitSha = settingKey[String]("SHA of HEAD commit")
+
+gitHeadCommitSha in ThisBuild := Process("git rev-parse HEAD").lines.head
+
+version in ThisBuild := "1.0-" + gitHeadCommitSha.value
 
 sbtBinaryVersion := "0.13"
 
