@@ -1,4 +1,4 @@
-package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
+package lt.overdrive.trackparser.processing
 
 import org.joda.time.Seconds
 

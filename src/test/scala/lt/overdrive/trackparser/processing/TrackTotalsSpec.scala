@@ -2,7 +2,6 @@ package lt.overdrive.trackparser.processing
 
 import org.specs2.mutable.Specification
 import lt.overdrive.trackparser.domain.Track
-import lt.overdrive.trackparser.lt.overdrive.trackparser.processing.{TrackProcessor, TrackTotals}
 import lt.overdrive.trackparser.GpsTestDataHelper
 import GpsTestDataHelper._
 

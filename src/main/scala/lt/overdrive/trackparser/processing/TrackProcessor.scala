@@ -1,9 +1,8 @@
-package lt.overdrive.trackparser.lt.overdrive.trackparser.processing
+package lt.overdrive.trackparser.processing
 
 import lt.overdrive.trackparser.domain.{TrackPoint, Track}
 import org.joda.time.Seconds
 import scala.annotation.tailrec
-import lt.overdrive.trackparser.processing.TrackRectangle
 
 case class TrackProcessor(track: Track) {
   def calculateRectangle(): Option[TrackRectangle] = {
@@ -27,8 +26,8 @@ case class TrackProcessor(track: Track) {
       def makeSegments(first: TrackPoint, rest: Seq[TrackPoint], accu: Seq[Segment]): Seq[Segment] = {
         val segments = accu :+ Segment(first, rest.head)
         rest match {
-          case head :: Nil => segments
-          case head :: tail => makeSegments(head, tail, segments)
+          case _ :: Nil => segments
+          case restHead :: restTail => makeSegments(restHead, restTail, segments)
         }
       }
 
@@ -80,7 +79,8 @@ case class TrackProcessor(track: Track) {
     }
 
     def calculateTotals = {
-      val distance = segments.foldLeft(0d)((distance, segment) => distance + Haversine.calculateDistance(segment.point1, segment.point2))
+      val distance = segments.foldLeft(0d)(
+        (distance, segment) => distance + Haversine.calculateDistance(segment.point1, segment.point2))
 
       val pointsWithoutTime = points.filter(_.date.isEmpty)
       val timeTotals = calculateTimeTotalsIfHasTime(pointsWithoutTime, distance)

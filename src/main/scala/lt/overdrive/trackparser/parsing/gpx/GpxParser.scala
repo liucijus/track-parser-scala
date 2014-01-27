@@ -4,7 +4,7 @@ import javax.xml.validation.Schema
 import lt.overdrive.trackparser.domain.{TrackPoint, Track, Trail}
 import java.io.File
 import lt.overdrive.trackparser.utils.ResourceUtils.loadSchema
-import lt.overdrive.trackparser.parsing.{ParserException, GpsFileParser}
+import lt.overdrive.trackparser.parsing.GpsFileParser
 import org.joda.time.DateTime
 
 class GpxParser extends GpsFileParser {

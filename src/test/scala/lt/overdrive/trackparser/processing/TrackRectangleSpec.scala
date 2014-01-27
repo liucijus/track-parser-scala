@@ -3,7 +3,6 @@ package lt.overdrive.trackparser.processing
 import org.specs2.mutable.Specification
 import lt.overdrive.trackparser.GpsTestDataHelper._
 import lt.overdrive.trackparser.domain.{TrackPoint, Track}
-import lt.overdrive.trackparser.lt.overdrive.trackparser.processing.TrackProcessor
 
 class TrackRectangleSpec extends Specification {
   "track rectangle" should {
@@ -43,7 +42,7 @@ class TrackRectangleSpec extends Specification {
 
       val rectangle = TrackProcessor(track).calculateRectangle()
 
-      rectangle.get.getCenterPoint must beEqualTo(expectedCenter)
+      rectangle.get.centerPoint must beEqualTo(expectedCenter)
     }
 
     "correct rectangle for multiple tracks" in {
@@ -56,7 +55,7 @@ class TrackRectangleSpec extends Specification {
 
       rectangle.get.southWest must beEqualTo(expectedSouthWest)
       rectangle.get.northEast must beEqualTo(expectedNorthEast)
-      rectangle.get.getCenterPoint() must beEqualTo(expectedCenter)
+      rectangle.get.centerPoint must beEqualTo(expectedCenter)
     }
   }
 }

@@ -9,7 +9,7 @@ object ResourceUtils {
   def getFile(name: String): Option[File] = try {
     Option(new File(Thread.currentThread.getContextClassLoader.getResource(name).toURI))
   } catch {
-    case _ => None
+    case _: Throwable => None
   }
 
   def loadSchema(name: String): Try[Schema] = {

@@ -3,7 +3,7 @@ package lt.overdrive.trackparser.processing
 import lt.overdrive.trackparser.domain.TrackPoint
 
 case class TrackRectangle(southWest: TrackPoint, northEast: TrackPoint) {
-  def getCenterPoint(): TrackPoint = {
+  val centerPoint = {
     val northLatitude = northEast.latitude
     val eastLongitude = northEast.longitude
 
