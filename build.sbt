@@ -1,6 +1,6 @@
 name := "track-parser"
 
-organization := "overdrive.lt"
+organization := "lt.overdrive"
 
 val gitHeadCommitSha = settingKey[String]("SHA of HEAD commit")
 
