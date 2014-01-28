@@ -7,7 +7,7 @@ import javax.xml.XMLConstants
 
 object ResourceUtils {
   def getFile(name: String): Option[File] = try {
-    Option(new File(Thread.currentThread.getContextClassLoader.getResource(name).toURI))
+    Option(new File(Thread.currentThread.getContextClassLoader.getResource(name).getFile))
   } catch {
     case _: Throwable => None
   }
