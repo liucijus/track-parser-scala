@@ -4,7 +4,7 @@ organization := "lt.overdrive"
 
 val gitHeadCommitSha = settingKey[String]("SHA of HEAD commit")
 
-gitHeadCommitSha in ThisBuild := Process("git rev-parse HEAD").lines.head
+gitHeadCommitSha in ThisBuild := Process("git rev-parse --short HEAD").lines.head
 
 version in ThisBuild := "1.0-" + gitHeadCommitSha.value
 
