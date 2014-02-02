@@ -2,11 +2,8 @@ name := "track-parser"
 
 organization := "lt.overdrive"
 
-val gitHeadCommitSha = settingKey[String]("SHA of HEAD commit")
-
-gitHeadCommitSha in ThisBuild := Process("git rev-parse --short HEAD").lines.head
-
-version in ThisBuild := "1.0-" + gitHeadCommitSha.value
+//N.B.!  Version is generated upon sbt startup. To get unique build versions reload sbt.
+version in ThisBuild := "1.0-" + new java.text.SimpleDateFormat("yyyyMMdd.kkmmss.SSS").format(new java.util.Date())
 
 sbtBinaryVersion := "0.13"
 
