@@ -1,6 +1,6 @@
 package lt.overdrive.trackparser
 
-import _root_.lt.overdrive.trackparser.domain.{Track, Trail, TrackPoint}
+import lt.overdrive.trackparser.domain.{Track, Trail, TrackPoint}
 import com.github.nscala_time.time.Imports._
 
 object GpsTestDataHelper {
