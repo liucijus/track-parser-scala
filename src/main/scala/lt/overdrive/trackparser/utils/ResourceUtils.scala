@@ -13,7 +13,6 @@ object ResourceUtils {
   def getResourceUrl(name: String): Option[URL] =
     try2Option(Thread.currentThread.getContextClassLoader.getResource(name))
 
-
   def try2Option[A](f: => A): Option[A] = try {
     Option(f)
   } catch {
