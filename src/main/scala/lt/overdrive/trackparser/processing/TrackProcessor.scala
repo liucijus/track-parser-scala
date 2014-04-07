@@ -5,14 +5,12 @@ import org.joda.time.Seconds
 import scala.annotation.tailrec
 
 case class TrackProcessor(track: Track) {
-  def calculateRectangle(): Option[TrackRectangle] = {
-    track.points match {
-      case Nil => None
-      case points => {
-        val southWest = TrackPoint(points.minBy(_.latitude).latitude, points.minBy(_.longitude).longitude)
-        val northEast = TrackPoint(points.maxBy(_.latitude).latitude, points.maxBy(_.longitude).longitude)
-        Option(TrackRectangle(southWest, northEast))
-      }
+  def calculateRectangle(): Option[TrackRectangle] = track.points match {
+    case Nil => None
+    case points => {
+      val southWest = TrackPoint(points.minBy(_.latitude).latitude, points.minBy(_.longitude).longitude)
+      val northEast = TrackPoint(points.maxBy(_.latitude).latitude, points.maxBy(_.longitude).longitude)
+      Option(TrackRectangle(southWest, northEast))
     }
   }
 
@@ -96,9 +94,8 @@ case class TrackProcessor(track: Track) {
       (0d, None, defaultTimeTotals)
     else if (points.size == 1)
       (0d, Some(AltitudeTotals(0, 0)), defaultTimeTotals)
-    else {
+    else
       calculateTotals
-    }
 
     TrackTotals(distance, altitudeTotals, timeTotals)
   }
