@@ -19,8 +19,7 @@ case class TrackProcessor(track: Track) {
   private val segments: Seq[Segment] = convert(track)
 
   private def convert(track: Track): Seq[Segment] = track.points match {
-    case Nil => List()
-    case head :: Nil => List()
+    case Nil | _ :: Nil => List()
     case head :: tail => {
       @tailrec
       def makeSegments(first: TrackPoint, rest: Seq[TrackPoint], accu: Seq[Segment]): Seq[Segment] = {
