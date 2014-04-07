@@ -25,15 +25,9 @@ object Parser {
 
 case class Parser(file: File) {
   def guessFileType: FileType = {
-    def isTcxFile(file: File): Boolean = {
-      val schema: Schema = new TcxParser().getSchema
-      isValidSchemaDocument(schema)
-    }
+    def isTcxFile(file: File): Boolean = isValidSchemaDocument(new TcxParser().getSchema)
 
-    def isGpxFile(file: File): Boolean = {
-      val schema: Schema = new GpxParser().getSchema
-      isValidSchemaDocument(schema)
-    }
+    def isGpxFile(file: File): Boolean = isValidSchemaDocument(new GpxParser().getSchema)
 
     def isValidSchemaDocument(schema: Schema): Boolean = {
       val validator: Validator = schema.newValidator
@@ -49,7 +43,8 @@ case class Parser(file: File) {
   def parserForType(fileType: FileType): Try[GpsFileParser] = fileType match {
     case FileType.Tcx => Success(new TcxParser())
     case FileType.Gpx => Success(new GpxParser())
-    case _ => Failure(new UnrecognizedFileException(s"File $file was not recognized to be of supported type [TCX, GPX]"))
+    case _ =>
+      Failure(new UnrecognizedFileException(s"File $file was not recognized to be of supported type [TCX, GPX]"))
   }
 }
 
